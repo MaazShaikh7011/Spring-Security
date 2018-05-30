@@ -9,6 +9,8 @@ CREATE TABLE `app_role` (
   `role_name` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) 
+
+
 CREATE TABLE `app_user` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `first_name` varchar(255) NOT NULL,
@@ -17,6 +19,7 @@ CREATE TABLE `app_user` (
   `username` varchar(255) NOT NULL,
   PRIMARY KEY (`id`)
 ) 
+
 CREATE TABLE `role_operation` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `role_id` bigint(20) NOT NULL,
@@ -33,5 +36,5 @@ CREATE TABLE `user_role` (
 ) 
 
 2. Now Create all repository and model only for usable table like role and user and operation ..
- 
+3. Now config the Spring security and other dependent classes Data
 
