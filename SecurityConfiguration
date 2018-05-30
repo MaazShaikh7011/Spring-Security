@@ -1,0 +1,48 @@
+@ComponentScan(basePackages = "com.munif.security.securityprog")
+@Configuration
+@EnableWebSecurity
+@EnableAutoConfiguration 
+public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
+/*	
+	@Value("${spring.queries.users-query}")
+	private String usersQuery;
+
+	@Value("${spring.queries.roles-query}")
+	private String rolesQuery;
+*/
+//	@Autowired
+//	public void configureGlobalSecurity(AuthenticationManagerBuilder auth) throws Exception {
+//		 auth.inMemoryAuthentication().withUser("munif").password("munif").roles("PURCHASE","USER");
+//		// user table
+//		// roles table
+//		 //user_role (permission)
+//		//auth.jdbcAuthentication().usersByUsernameQuery(usersQuery).authoritiesByUsernameQuery(rolesQuery)
+//				//.dataSource(dataSource);
+//	}
+
+	
+	@Autowired
+	private UserDetailsService userDetailsService;
+
+	@Override
+	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+		auth.userDetailsService(userDetailsService);
+		/*auth.inMemoryAuthentication().withUser("purchase").password("purchase").roles("PURCHASE","USER")
+		.and()
+		.withUser("sales").password("sales").roles("SALES","USER").and()
+		.withUser("admin").password("admin").roles("ADMIN","USER").and()
+		.withUser("user").password("user").roles("USER");*/
+		// .passwordEncoder(new ShaPasswordEncoder(encodingStrength));
+	}
+	@Override
+	protected void configure(HttpSecurity http) throws Exception {
+		// http.authorizeRequests().antMatchers("login").permitAll().and().formLogin();
+		http.authorizeRequests().antMatchers("login").permitAll()
+		.antMatchers("/sales/*").access("hasAuthority('SALES')")
+				.antMatchers("/purchase/*").access("hasAuthority('PURCHASE')")
+				.antMatchers("/", "/user/*").access("hasAuthority('USER')")
+				.antMatchers("/admin/*").access("hasAuthority('ADMIN')")
+				.and().formLogin();
+
+	}
+}
